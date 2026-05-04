@@ -5,4 +5,4 @@
 # Segunda Parte: Registro de Item (Perdi / Encontrei); Tipo, Título, Descrição, Data, Local, Fotos, Recompensa, Privacidade do Contato (mostrar telefone ou só mensagem).
 # na segunda parte tem div da parte dos achados e perdidos
 
-lasdaljdlksadj
+
