@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Achados e Perdidos - Sistema Comunitário</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: #f0f2f5;
+            padding: 20px;
+        }
+
+        /* Container principal */
+        .app-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            overflow: hidden;
+            padding: 20px 24px 32px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 20px;
+            margin-bottom: 28px;
+        }
+        .logo h1 {
+            font-size: 1.7rem;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .logo p {
+            color: #4b5563;
+            font-size: 0.85rem;
+        }
+        .user-area {
+            background: #f8fafc;
+            padding: 12px 20px;
+            border-radius: 60px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .btn {
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+        .btn-outline {
+            background: white;
+            border: 1px solid #cbd5e1;
+            color: #1f2937;
+        }
+        .btn-outline:hover {
+            background: #f1f5f9;
+        }
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 0.8rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 28px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 12px;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #4b5563;
+        }
+        .tab-btn.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* Grid de posts */
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border: 1px solid #eef2f6;
+            transition: transform 0.1s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+        }
+        .card-header {
+            padding: 16px 18px 8px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+        .badge {
+            font-size: 0.7rem;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-weight: bold;
+        }
+        .badge-aberto { background: #fef3c7; color: #b45309; }
+        .badge-resolvido { background: #dcfce7; color: #15803d; }
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 8px 18px 6px;
+        }
+        .card-desc {
+            padding: 0 18px;
+            color: #334155;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            word-break: break-word;
+        }
+        .card-meta {
+            padding: 0 18px 12px;
+            font-size: 0.75rem;
+            color: #6c757d;
+            border-bottom: 1px solid #edf2f7;
+        }
+        .contact-info {
+            background: #f8fafc;
+            margin: 12px 18px;
+            padding: 8px 12px;
+            border-radius: 16px;
+            font-size: 0.75rem;
+        }
+        .comment-section {
+            padding: 12px 18px 18px;
+            background: #f9f9fc;
+            border-top: 1px solid #eef2f8;
+        }
+        .comment-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 12px;
+            font-size: 0.8rem;
+        }
+        .comment-item {
+            background: white;
+            padding: 8px 10px;
+            border-radius: 16px;
+            margin-bottom: 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+        .comment-img {
+            max-width: 80px;
+            max-height: 60px;
+            border-radius: 8px;
+            margin-top: 6px;
+            border: 1px solid #ddd;
+        }
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .comment-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 20px;
+            resize: vertical;
+            font-size: 0.8rem;
+        }
+        .file-label {
+            font-size: 0.7rem;
+            background: #eef2ff;
+            padding: 5px 10px;
+            border-radius: 40px;
+            text-align: center;
+            cursor: pointer;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .status-select {
+            margin-top: 8px;
+            padding: 4px 8px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            font-size: 0.7rem;
+        }
+        hr {
+            margin: 16px 0;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            max-width: 500px;
+            width: 90%;
+            border-radius: 32px;
+            padding: 24px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .warning {
+            color: #dc2626;
+            font-size: 0.7rem;
+        }
+        .flex-btns {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+        @media (max-width: 700px) {
+            .app-container { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container" id="app">
+    <div class="header">
+        <div class="logo">
+            <h1>🔍 Achados & Perdidos</h1>
+            <p>Comunidade colaborativa • Registre itens perdidos ou encontrados</p>
+        </div>
+        <div class="user-area" id="userArea">
+            <span id="userStatusText">Não autenticado</span>
+            <button class="btn btn-outline btn-sm" id="loginBtn">Login / Cadastro</button>
+            <button class="btn btn-outline btn-sm" id="logoutBtn" style="display:none;">Sair</button>
+        </div>
+    </div>
+
+    <!-- Tabs: Perdidos / Achados -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="lost">📌 Itens Perdidos</button>
+        <button class="tab-btn" data-tab="found">✅ Itens Achados</button>
+    </div>
+
+    <!-- Botão novo post (só aparece logado) -->
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+        <button id="newPostBtn" class="btn btn-primary" style="display: none;">➕ Publicar item</button>
+    </div>
+
+    <!-- Grid dos posts dinâmico -->
+    <div id="postsContainer" class="posts-grid"></div>
+</div>
+
+<!-- MODAL LOGIN/CADASTRO (endereço + contato obrigatório) -->
+<div id="authModal" class="modal">
+    <div class="modal-content">
+        <h2>🔐 Identificação obrigatória</h2>
+        <p style="margin-bottom: 16px;">Para postar itens e comentários, complete seu cadastro.</p>
+        <div class="form-group">
+            <label>Nome completo *</label>
+            <input type="text" id="authName" placeholder="Seu nome">
+        </div>
+        <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="authEmail" placeholder="exemplo@email.com">
+        </div>
+        <div class="form-group">
+            <label>Endereço (bairro/cidade/rua) *</label>
+            <input type="text" id="authEndereco" placeholder="Ex: Centro, Rua das Flores, 123">
+        </div>
+        <div class="form-group">
+            <label>Formas de contato (telefone, WhatsApp, Instagram) *</label>
+            <input type="text" id="authContato" placeholder="(11) 99999-9999 / @usuario">
+        </div>
+        <div class="flex-btns">
+            <button class="btn btn-outline" id="closeAuthModal">Cancelar</button>
+            <button class="btn btn-primary" id="saveAuthBtn">Salvar e entrar</button>
+        </div>
+        <div class="warning" id="authWarning"></div>
+    </div>
+</div>
+
+<!-- MODAL PARA CRIAR POST (Achado ou Perdido) -->
+<div id="postModal" class="modal">
+    <div class="modal-content">
+        <h2 id="postModalTitle">➕ Novo registro</h2>
+        <div class="form-group">
+            <label>Título *</label>
+            <input type="text" id="postTitle" placeholder="Ex: Mochila preta">
+        </div>
+        <div class="form-group">
+            <label>Descrição *</label>
+            <textarea rows="2" id="postDesc" placeholder="Detalhes, cor, local aproximado..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>Tipo *</label>
+            <select id="postType">
+                <option value="lost">Perdido</option>
+                <option value="found">Achado</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Status inicial</label>
+            <select id="postStatus">
+                <option value="aberto">Aberto</option>
+                <option value="resolvido">Resolvido</option>
+            </select>
+        </div>
+        <div class="flex-btns">
+            <button class="btn btn-outline" id="closePostModal">Cancelar</button>
+            <button class="btn btn-primary" id="savePostBtn">Publicar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ---------- SIMULAÇÃO DE BANCO DE DADOS (localStorage) ----------
+    let usuarios = [];     // { id, nome, email, endereco, contato }
+    let sessoes = { userId: null }; // usuário logado
+    let posts = [];        // { id, type(lost/found), title, desc, userId, status, createdAt, comentarios[] }
+    // cada comentário: { userId, nomeUsuario, texto, fotoUrl (obrigatório), createdAt }
+
+    // Inicializa dados fake se vazio
+    function initData() {
+        const storedUsers = localStorage.getItem("achados_usuarios");
+        const storedPosts = localStorage.getItem("achados_posts");
+        if(storedUsers) usuarios = JSON.parse(storedUsers);
+        else {
+            // usuario demo para teste, mas sem obrigar cadastro completo; o modal obrigará todos.
+            usuarios = [];
+            localStorage.setItem("achados_usuarios", JSON.stringify(usuarios));
+        }
+        if(storedPosts) posts = JSON.parse(storedPosts);
+        else {
+            posts = [];
+            // exemplos iniciais
+            localStorage.setItem("achados_posts", JSON.stringify(posts));
+        }
+        const session = localStorage.getItem("achados_session");
+        if(session) {
+            const uid = parseInt(session);
+            const userExists = usuarios.find(u => u.id === uid);
+            if(userExists) sessoes.userId = uid;
+            else localStorage.removeItem("achados_session");
+        }
+    }
+
+    function saveUsers() { localStorage.setItem("achados_usuarios", JSON.stringify(usuarios)); }
+    function savePosts() { localStorage.setItem("achados_posts", JSON.stringify(posts)); }
+    function updateSessionUI() {
+        const logged = isLogged();
+        const userStatusSpan = document.getElementById("userStatusText");
+        const loginBtn = document.getElementById("loginBtn");
+        const logoutBtn = document.getElementById("logoutBtn");
+        const newPostBtn = document.getElementById("newPostBtn");
+        if(logged) {
+            const user = getLoggedUser();
+            userStatusSpan.innerText = `👤 ${user.nome} (${user.endereco.substring(0,20)}...)`;
+            loginBtn.style.display = "none";
+            logoutBtn.style.display = "inline-block";
+            newPostBtn.style.display = "inline-block";
+        } else {
+            userStatusSpan.innerText = "🔒 Não autenticado";
+            loginBtn.style.display = "inline-block";
+            logoutBtn.style.display = "none";
+            newPostBtn.style.display = "none";
+        }
+        renderCurrentTab();
+    }
+
+    function isLogged() { return sessoes.userId !== null; }
+    function getLoggedUser() { return usuarios.find(u => u.id === sessoes.userId); }
+
+    // Autenticação obrigatória (endereço + contato)
+    function openAuthModal() {
+        document.getElementById("authModal").style.display = "flex";
+        document.getElementById("authWarning").innerText = "";
+        document.getElementById("authName").value = "";
+        document.getElementById("authEmail").value = "";
+        document.getElementById("authEndereco").value = "";
+        document.getElementById("authContato").value = "";
+    }
+    function closeAuthModal() { document.getElementById("authModal").style.display = "none"; }
+
+    document.getElementById("closeAuthModal").onclick = closeAuthModal;
+    document.getElementById("saveAuthBtn").onclick = () => {
+        const nome = document.getElementById("authName").value.trim();
+        const email = document.getElementById("authEmail").value.trim();
+        const endereco = document.getElementById("authEndereco").value.trim();
+        const contato = document.getElementById("authContato").value.trim();
+        if(!nome || !email || !endereco || !contato) {
+            document.getElementById("authWarning").innerText = "Todos os campos são obrigatórios (endereço e contato também).";
+            return;
+        }
+        let user = usuarios.find(u => u.email === email);
+        if(user) {
+            // atualiza dados (endereço/contato)
+            user.nome = nome;
+            user.endereco = endereco;
+            user.contato = contato;
+        } else {
+            const newId = Date.now() + Math.floor(Math.random()*1000);
+            user = { id: newId, nome, email, endereco, contato };
+            usuarios.push(user);
+        }
+        saveUsers();
+        sessoes.userId = user.id;
+        localStorage.setItem("achados_session", user.id);
+        closeAuthModal();
+        updateSessionUI();
+        renderCurrentTab();
+    };
+
+    // Logout
+    document.getElementById("logoutBtn").onclick = () => {
+        sessoes.userId = null;
+        localStorage.removeItem("achados_session");
+        updateSessionUI();
+        renderCurrentTab();
+    };
+    document.getElementById("loginBtn").onclick = openAuthModal;
+
+    // Criar novo post (somente logado)
+    document.getElementById("newPostBtn").onclick = () => {
+        if(!isLogged()) { openAuthModal(); return; }
+        document.getElementById("postTitle").value = "";
+        document.getElementById("postDesc").value = "";
+        document.getElementById("postType").value = "lost";
+        document.getElementById("postStatus").value = "aberto";
+        document.getElementById("postModal").style.display = "flex";
+    };
+    function closePostModal() { document.getElementById("postModal").style.display = "none"; }
+    document.getElementById("closePostModal").onclick = closePostModal;
+    document.getElementById("savePostBtn").onclick = () => {
+        if(!isLogged()) { closePostModal(); openAuthModal(); return; }
+        const title = document.getElementById("postTitle").value.trim();
+        const desc = document.getElementById("postDesc").value.trim();
+        if(!title || !desc) { alert("Título e descrição obrigatórios"); return; }
+        const type = document.getElementById("postType").value;
+        const status = document.getElementById("postStatus").value;
+        const newPost = {
+            id: Date.now(),
+            type: type,
+            title: title,
+            desc: desc,
+            userId: sessoes.userId,
+            status: status,
+            createdAt: new Date().toISOString(),
+            comentarios: []
+        };
+        posts.unshift(newPost);
+        savePosts();
+        closePostModal();
+        renderCurrentTab();
+    };
+
+    // Adicionar comentário com foto OBRIGATÓRIA
+    async function addComentario(postId, texto, fileInputElement) {
+        if(!isLogged()) { openAuthModal(); return false; }
+        if(!texto.trim()) { alert("Escreva um comentário."); return false; }
+        const file = fileInputElement.files[0];
+        if(!file) { alert("Envio de foto é obrigatório para comentar!"); return false; }
+        // Converte foto para base64 (simulação)
+        const reader = new FileReader();
+        return new Promise((resolve) => {
+            reader.onload = function(e) {
+                const fotoBase64 = e.target.result;
+                const user = getLoggedUser();
+                const comentario = {
+                    userId: user.id,
+                    nomeUsuario: user.nome,
+                    texto: texto,
+                    fotoUrl: fotoBase64,
+                    createdAt: new Date().toISOString()
+                };
+                const post = posts.find(p => p.id === postId);
+                if(post) {
+                    post.comentarios.push(comentario);
+                    savePosts();
+                    renderCurrentTab();
+                    resolve(true);
+                } else resolve(false);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Atualizar status do post (apenas quem postou pode)
+    function updatePostStatus(postId, newStatus) {
+        if(!isLogged()) return;
+        const post = posts.find(p => p.id === postId);
+        if(post && post.userId === sessoes.userId) {
+            post.status = newStatus;
+            savePosts();
+            renderCurrentTab();
+        } else {
+            alert("Você só pode alterar o status dos seus próprios posts.");
+        }
+    }
+
+    // renderização dinâmica
+    let currentTab = "lost"; // lost ou found
+    function renderCurrentTab() {
+        const filtered = posts.filter(p => p.type === currentTab);
+        renderPosts(filtered);
+    }
+
+    function renderPosts(postsArray) {
+        const container = document.getElementById("postsContainer");
+        if(!postsArray.length) {
+            container.innerHTML = `<div style="text-align:center; padding: 40px;">📭 Nenhum item ${currentTab === 'lost' ? 'perdido' : 'achado'} ainda. Seja o primeiro a publicar!</div>`;
+            return;
+        }
+        container.innerHTML = "";
+        postsArray.forEach(post => {
+            const userPost = usuarios.find(u => u.id === post.userId);
+            const contatoInfo = userPost ? `📞 ${userPost.contato} | 📍 ${userPost.endereco}` : "Contato indisponível";
+            const card = document.createElement("div");
+            card.className = "card";
+            const isOwner = isLogged() && getLoggedUser()?.id === post.userId;
+            card.innerHTML = `
+                <div class="card-header">
+                    <span class="badge ${post.status === 'aberto' ? 'badge-aberto' : 'badge-resolvido'}">${post.status === 'aberto' ? '🟡 Aberto' : '✅ Resolvido'}</span>
+                    ${isOwner ? `<select class="status-select" data-postid="${post.id}">
+                        <option value="aberto" ${post.status === 'aberto' ? 'selected' : ''}>Aberto</option>
+                        <option value="resolvido" ${post.status === 'resolvido' ? 'selected' : ''}>Resolvido</option>
+                    </select>` : ''}
+                </div>
+                <div class="card-title">${escapeHtml(post.title)}</div>
+                <div class="card-desc">${escapeHtml(post.desc)}</div>
+                <div class="card-meta">📅 ${new Date(post.createdAt).toLocaleDateString()} • por ${userPost ? userPost.nome : 'Usuário'}</div>
+                <div class="contact-info"><strong>📌 Contato & Endereço:</strong> ${escapeHtml(contatoInfo)}</div>
+                <div class="comment-section">
+                    <strong>💬 Comentários (foto obrigatória):</strong>
+                    <div class="comment-list" id="comments-${post.id}">
+                        ${post.comentarios.map(c => `
+                            <div class="comment-item">
+                                <strong>${escapeHtml(c.nomeUsuario)}</strong> <span style="font-size:0.7rem;">${new Date(c.createdAt).toLocaleString()}</span><br>
+                                ${escapeHtml(c.texto)}<br>
+                                ${c.fotoUrl ? `<img src="${c.fotoUrl}" class="comment-img" alt="foto do comentário">` : ''}
+                            </div>
+                        `).join('')}
+                        ${post.comentarios.length === 0 ? '<em>Nenhum comentário ainda.</em>' : ''}
+                    </div>
+                    ${isLogged() ? `
+                        <div class="comment-form" data-postid="${post.id}">
+                            <textarea class="comment-input" placeholder="Digite seu comentário... (obrigatório foto)" rows="2"></textarea>
+                            <label class="file-label">📸 Selecionar foto (obrigatória) <input type="file" class="comment-file" accept="image/*"></label>
+                            <button class="btn btn-primary btn-sm submit-comment">Enviar comentário</button>
+                        </div>
+                    ` : `<p style="font-size:0.7rem; margin-top:6px;">🔑 Faça login para comentar com foto obrigatória.</p>`}
+                </div>
+            `;
+            container.appendChild(card);
+            // Evento de alteração de status
+            if(isOwner) {
+                const statusSelect = card.querySelector('.status-select');
+                if(statusSelect) {
+                    statusSelect.addEventListener('change', (e) => {
+                        updatePostStatus(post.id, e.target.value);
+                    });
+                }
+            }
+            // Evento comentário
+            const commentFormDiv = card.querySelector('.comment-form');
+            if(commentFormDiv) {
+                const textarea = commentFormDiv.querySelector('.comment-input');
+                const fileInput = commentFormDiv.querySelector('.comment-file');
+                const btn = commentFormDiv.querySelector('.submit-comment');
+                btn.addEventListener('click', async () => {
+                    const texto = textarea.value;
+                    await addComentario(post.id, texto, fileInput);
+                    textarea.value = '';
+                    fileInput.value = '';
+                });
+            }
+        });
+    }
+
+    function escapeHtml(str) { 
+        if(!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // troca de abas
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            currentTab = btn.getAttribute("data-tab");
+            renderCurrentTab();
+        });
+    });
+
+    // inicializar tudo
+    initData();
+    updateSessionUI();
+    // Fechar modais ao clicar fora
+    window.onclick = (e) => {
+        if(e.target.classList.contains('modal')) e.target.style.display = "none";
+    };
+</script>
+</body>
+</html>
