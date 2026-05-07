@@ -1,0 +1,28 @@
+ir no git
+acessar o repositorio achados e perdidos
+acessar pasta achados e perdidos
+acessar pasta frontend
+baixar os arquivos index, style e script
+entrar no gemine ou chat gpt ou deepseek ou qualquer outro
+enviar os três arquivos junto do texto "gere os arquivos server e jason para fazer teste no 
+localhost"
+criar uma pasta chamada aep na area de trabalho (desktop) e coloque os arquivos que foram 
+baixados do git
+ir no visualstudio criar um arquivo server.js salvar dentro da pasta aep
+cole o que o chat gerou nesse arquivo
+faça o mesmo com o codigo json, o arquivo deve chamar package.json
+volte no chat de ia de sua escola e peça agora para gerar o mysql do seus sistema
+inicie o wamp
+entre no mysql e cole o que foi gerado na ia, em seguida execute a linha de criar o banco de
+dados, em seguida de selecionar e apague as e depois executo todas as outras linhas para
+criar as tabelas
+va no prompt de comando e use o comando cd para entrar na pasta aep
+assim: cd Desktop/aep e de enter
+em seguida digite npm install e de enter
+em seguida digite npm start
+deve aparecer algo do tipo "Servidor rodando em http://localhost:3000"
+va no navegador e digite localhost:3000 e ai aparecera seu site, o nosso servidor local funcionou
+agora para testar o banco de dados, peça para ia "quero testar o banco no servidor Node.js"
+copiei o codigo que ele gerou e crie o arquivo no visual e cole o codigo, se necessário altere o 
+arquivo server se a ia mencionar
+em seguida va no prompt acesse sua pasta com cd e digite npm install mysql2 e de enter
