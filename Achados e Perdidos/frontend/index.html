@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Achados & Perdidos | Encontre o que você perdeu</title>
+    
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- CSS Principal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ELEMENTOS DECORATIVOS -->
+<div class="ribbon ribbon-left" aria-hidden="true"></div>
+<div class="ribbon ribbon-right" aria-hidden="true"></div>
+
+<!-- TELA INICIAL (LANDING PAGE) -->
+<div id="telaInicial" class="landing-page">
+    <div class="landing-content">
+        <div class="hero-section">
+            <div class="hero-icon">
+                <i class="fas fa-magnifying-glass"></i>
+            </div>
+            <h1 class="hero-title">Achados & Perdidos</h1>
+            <p class="hero-subtitle">Uma ponte entre quem perdeu e quem encontrou</p>
+            
+            <div class="hero-description">
+                <p>Perdeu algo importante? Encontrou um objeto e quer devolver ao dono?</p>
+                <p>Nosso site conecta pessoas que perderam itens com quem os encontrou, 
+                   criando uma comunidade mais solidária e colaborativa.</p>
+            </div>
+
+            <!-- Imagens de pessoas felizes -->
+            <div class="happy-people">
+                <div class="people-row">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=150&h=150&fit=crop" alt="Pessoas felizes" class="happy-img">
+                    <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=150&h=150&fit=crop" alt="Amigos sorrindo" class="happy-img">
+                    <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=150&h=150&fit=crop" alt="Grupo feliz" class="happy-img">
+                    <img src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?w=150&h=150&fit=crop" alt="Comunidade unida" class="happy-img">
+                </div>
+                <p class="people-quote"><i class="fas fa-quote-left"></i> Juntos, podemos fazer a diferença e devolver sorrisos <i class="fas fa-quote-right"></i></p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-search"></i>
+                    <h3>Encontre</h3>
+                    <p>Busque por itens perdidos na sua região</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-share-alt"></i>
+                    <h3>Compartilhe</h3>
+                    <p>Publique anúncios de itens perdidos ou achados</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-comments"></i>
+                    <h3>Conecte-se</h3>
+                    <p>Comente e entre em contato com outros usuários</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fab fa-whatsapp"></i>
+                    <h3>Contato direto</h3>
+                    <p>Comunique-se facilmente via WhatsApp</p>
+                </div>
+            </div>
+            
+            <div class="cta-buttons">
+                <button class="btn btn-primary btn-large" id="entrarPlataformaBtn">
+                    <i class="fas fa-sign-in-alt"></i> Entrar na Plataforma
+                </button>
+                <button class="btn btn-outline btn-large" id="criarContaLandingBtn">
+                    <i class="fas fa-user-plus"></i> Criar Conta Grátis
+                </button>
+            </div>
+            
+            <div class="stats-preview">
+                <div class="stat-preview-item">
+                    <span class="stat-number" id="previewTotalItens">0</span>
+                    <span class="stat-label">Itens cadastrados</span>
+                </div>
+                <div class="stat-preview-item">
+                    <span class="stat-number" id="previewResolvidos">0</span>
+                    <span class="stat-label">Itens resolvidos</span>
+                </div>
+                <div class="stat-preview-item">
+                    <i class="fas fa-heart"></i>
+                    <span class="stat-label">Comunidade ativa</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-wrapper" id="appRoot" style="display:none;">
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="logo">
+            <div class="logo-icon"><i class="fas fa-magnifying-glass"></i></div>
+            <div class="logo-text"><h1>Achados & Perdidos</h1></div>
+        </div>
+        <div class="user-status" id="userArea">
+            <span id="userStatusText"><i class="fas fa-user-lock"></i> Deslogado</span>
+            <button class="btn btn-outline btn-sm" id="loginBtn">Entrar</button>
+            <button class="btn btn-outline" id="logoutBtn" style="display:none;">Sair</button>
+        </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="hero-stats" id="statsArea">
+        <div class="stat-block"><div class="stat-number" id="totalItens">0</div><div>Itens totais</div></div>
+        <div class="stat-block"><div class="stat-number" id="totalResolvidos">0</div><div>Resolvidos</div></div>
+        <div class="stat-block"><div class="stat-number" id="totalComentarios">0</div><div>Interações</div></div>
+    </div>
+
+    <!-- BUSCA + FILTRO -->
+    <div class="search-bar">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Buscar por título ou descrição...">
+        </div>
+        <div class="filter-group" id="statusFilterGroup">
+            <button class="filter-btn active-filter" data-filter="all">Todos</button>
+            <button class="filter-btn" data-filter="aberto">Abertos</button>
+            <button class="filter-btn" data-filter="resolvido">Resolvidos</button>
+        </div>
+    </div>
+
+    <!-- TABS + BOTÃO NOVO POST -->
+    <div class="tabs-actions">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="lost"><i class="fas fa-frown"></i> Perdidos</button>
+            <button class="tab-btn" data-tab="found"><i class="fas fa-smile-wink"></i> Achados</button>
+        </div>
+        <button id="newPostBtn" class="btn-new" style="display:none;"><i class="fas fa-plus-circle"></i> Publicar Item</button>
+    </div>
+
+    <!-- FEED DE POSTS -->
+    <div id="postsContainer" class="posts-grid"></div>
+    
+    <div class="footer-site">
+        <i class="fas fa-shield-alt"></i> Comunidade segura • Ajude alguém hoje
+    </div>
+</div>
+
+<!-- MODAL LOGIN -->
+<div id="loginModal" class="modal">
+    <div class="modal-box">
+        <div id="loginPanel">
+            <h3><i class="fas fa-sign-in-alt"></i> Login</h3>
+            <div class="form-group">
+                <label>Usuário</label>
+                <input type="text" id="loginUser" placeholder="Seu nome de usuário">
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <div class="input-group">
+                    <input type="password" id="loginPass" placeholder="Senha">
+                    <button class="toggle-senha" onclick="toggleSenha('loginPass', this)">👁️</button>
+                </div>
+            </div>
+            <button class="btn btn-primary" id="doLoginBtn">Entrar</button>
+            <p style="margin-top:12px;">
+                <a href="#" id="showCadastroLink">Criar conta</a> | 
+                <a href="#" id="showRecuperarLink">Esqueci a senha</a>
+            </p>
+        </div>
+        
+        <div id="cadastroPanel" style="display:none;">
+            <h3><i class="fas fa-user-plus"></i> Criar Conta</h3>
+            <div class="form-group"><label>Usuário *</label><input type="text" id="cadUser"></div>
+            <div class="form-group"><label>Email *</label><input type="email" id="cadEmail"></div>
+            <div class="form-group"><label>Endereço (opcional)</label><input type="text" id="cadEndereco"></div>
+            <div class="form-group"><label>WhatsApp * (ex: 38999999999)</label><input type="text" id="cadTelefone"></div>
+            <div class="form-group">
+                <label>Senha *</label>
+                <div class="input-group">
+                    <input type="password" id="cadPass" onkeyup="validarSenha()">
+                    <button class="toggle-senha" onclick="toggleSenha('cadPass', this)">👁️</button>
+                </div>
+            </div>
+            <div class="requisitos" id="requisitosSenha">
+                <small>
+                    <span id="reqMinimo">❌</span> 6 caracteres |
+                    <span id="reqMaiuscula">❌</span> Maiúscula |
+                    <span id="reqMinuscula">❌</span> Minúscula |
+                    <span id="reqNumero">❌</span> Número |
+                    <span id="reqSemEspeciais">❌</span> Sem especiais
+                </small>
+            </div>
+            <button class="btn btn-primary" id="doCadastroBtn" disabled>Cadastrar</button>
+            <p style="margin-top:12px;"><a href="#" id="voltarLoginCadastro">← Voltar ao login</a></p>
+        </div>
+        
+        <div id="recuperarPanel" style="display:none;">
+            <h3><i class="fas fa-key"></i> Recuperar Senha</h3>
+            <div class="form-group"><label>Seu email cadastrado</label><input type="email" id="recEmail"></div>
+            <button class="btn btn-primary" id="doRecuperarBtn">Recuperar</button>
+            <p style="margin-top:12px;"><a href="#" id="voltarLoginRecuperar">← Voltar ao login</a></p>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PARA CRIAR POST -->
+<div id="postModal" class="modal">
+    <div class="modal-box">
+        <h3><i class="fas fa-camera-retro"></i> Novo Item</h3>
+        <div class="form-group"><label>Título *</label><input type="text" id="postTitulo"></div>
+        <div class="form-group"><label>Descrição *</label><textarea id="postDescricao" rows="3"></textarea></div>
+        <div class="form-group">
+            <label>Categoria</label>
+            <select id="postCategoria">
+                <option value="lost">🔴 Perdido</option>
+                <option value="found">🟢 Achado</option>
+            </select>
+        </div>
+        <div class="form-group"><label>Endereço *</label><input type="text" id="postEndereco"></div>
+        <div class="form-group"><label>Data/Hora aproximada</label><input type="datetime-local" id="postHorario"></div>
+        <div class="form-group"><label>Imagem (opcional)</label><input type="file" id="postMidia" accept="image/*,video/*"></div>
+        <div class="form-group">
+            <label>Status</label>
+            <select id="postStatus">
+                <option value="aberto">🟡 Aberto</option>
+                <option value="resolvido">✅ Resolvido</option>
+            </select>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:16px;">
+            <button class="btn btn-outline" id="closePostModalBtn">Cancelar</button>
+            <button class="btn btn-primary" id="savePostBtn">Publicar</button>
+        </div>
+    </div>
+</div>
+
+<!-- PÁGINA DE DETALHES DO POST -->
+<div id="detalhesPost" style="display:none;" class="detail-page">
+    <button class="btn btn-outline" id="backToFeedBtn" style="margin-bottom:1rem;">
+        <i class="fas fa-arrow-left"></i> Voltar ao Feed
+    </button>
+    <div id="conteudoPostDetalhe"></div>
+    <hr style="margin:1rem 0;">
+    <h3><i class="fas fa-comments"></i> Comentários</h3>
+    <div id="listaComentariosDetalhe"></div>
+    <div id="formComentarioDetalhe" style="margin-top:1rem;">
+        <textarea id="comentarioTexto" rows="2" placeholder="Escreva seu comentário..."></textarea>
+        <label class="btn-upload-foto">
+            <i class="fas fa-camera"></i> Anexar foto (opcional)
+            <input type="file" id="comentarioFoto" accept="image/*" style="display:none;">
+        </label>
+        <button class="btn btn-primary" id="enviarComentarioBtn">Enviar Comentário</button>
+    </div>
+</div>
+
+
+<script src="script.js"></script>
+</body>
+</html>
