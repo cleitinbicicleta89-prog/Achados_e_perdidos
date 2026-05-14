@@ -1,0 +1,48 @@
+CREATE DATABASE IF NOT EXISTS achados_perdidos;
+
+USE achados_perdidos;
+
+
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    endereco VARCHAR(255),
+    telefone VARCHAR(20),
+    senha VARCHAR(255) NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT,
+    categoria ENUM('lost', 'found') NOT NULL,
+    titulo VARCHAR(255) NOT NULL,
+    descricao TEXT NOT NULL,
+    endereco VARCHAR(255),
+    horario DATETIME,
+    status ENUM('aberto', 'resolvido') DEFAULT 'aberto',
+    data_publicacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (usuario_id)
+    REFERENCES usuarios(id)
+    ON DELETE CASCADE
+);
+
+
+CREATE TABLE comentarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT,
+    usuario_id INT,
+    texto TEXT NOT NULL,
+    data_comentario TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (post_id)
+    REFERENCES posts(id)
+    ON DELETE CASCADE,
+
+    FOREIGN KEY (usuario_id)
+    REFERENCES usuarios(id)
+    ON DELETE CASCADE
+);
